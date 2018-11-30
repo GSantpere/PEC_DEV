@@ -345,11 +345,6 @@ with(df,factor(Elem,levels = levels))->df$Elem
 
 df$Y1 <- cut(df$logOR,breaks = c(-Inf,-3,-1,-0.5,0,0.5,1,3,Inf),right = FALSE)
 
-bonf<-0.05/dim(df)[1]
-rep(0.2, dim(df)[1])->vec
-vec[which(df$P<=bonf)]<-1
-df$border=as.factor(vec)
-
 with(df, factor(Cat, levels=rev(levels(df$Cat)[c(7,2,5,8,3,1,4,6)])))->df$Cat
 
 df$col<-rep(1,dim(df)[1])
@@ -357,16 +352,7 @@ df$col[which(df$logOR<0)]<-2
 df$col=as.factor(df$col)
 save(df, file='Integration.table.rda')
 
-myColors=c("#C10834", "#334A96")
-names(myColors) <- levels(df$col)
-ggplot(df, aes(x=Elem, y=Cat, size=abs(logOR), fill=col, alpha=border),guide=FALSE)+
-  geom_point(shape=21) + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(), 
-                                            panel.grid.minor = element_blank(), axis.line = element_line(colour = "white")) + scale_fill_manual(name = "col",values = myColors) + scale_size_continuous(range = c(2, 30)) + scale_alpha_discrete(range=c(0.5,1))
-
-
 #### Simplified version
-
-
 counts<-read.table("COUNTS.simple.2017.txt", header=T, sep="\t")
 counts[which(counts$Category=="pre.EQUAL_post.EQUAL"),]->all
 final.or<-c()
@@ -418,11 +404,6 @@ with(df,factor(Elem,levels = levels))->df$Elem
 
 df$Y1 <- cut(df$logOR,breaks = c(-Inf,-3,-1,-0.5,0,0.5,1,3,Inf),right = FALSE)
 
-bonf<-0.05/dim(df)[1]
-rep(0.2, dim(df)[1])->vec
-vec[which(df$P<=bonf)]<-1
-df$border=as.factor(vec)
-
 with(df, factor(Cat, levels=rev(levels(df$Cat)[c(4,3,2,1)])))->df$Cat
 
 df$col<-rep(1,dim(df)[1])
@@ -430,16 +411,7 @@ df$col[which(df$logOR<0)]<-2
 df$col=as.factor(df$col)
 save(df, file='Integration.table.simple.rda')
 
-myColors=c("#C10834", "#334A96")
-names(myColors) <- levels(df$col)
-ggplot(df, aes(x=Elem, y=Cat, size=abs(logOR), fill=col, alpha=border),guide=FALSE)+
-  geom_point(shape=21) + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(), 
-                                            panel.grid.minor = element_blank(), axis.line = element_line(colour = "white")) + scale_fill_manual(name = "col",values = myColors) + scale_size_continuous(range = c(2, 30)) + scale_alpha_discrete(range=c(0.5,1))
-
-
 #### ENHANCERS
-
-
 ### Load enhacers from DeSeq2 analysis
 
 #load('/Users/Gabriel/Desktop/YALE/MASTER/definitive.ENH.ANYPEAK.rda')
@@ -632,9 +604,6 @@ df2<-cbind(melt(Mor), melt(Mp))[,-c(4,5)]
 colnames(df2)<-c("EnhPat", "ExpPat", "OR", "P")
 
 df<-rbind(df, df2)
-
-bonf<-0.05/dim(df)[1]	
-#df$adjustedP<-p.adjust(df$P, "BH")
 
 df$col<-rep(1,dim(df)[1])
 df$col[which(df$P<0.05)]<-2
@@ -955,7 +924,7 @@ df$Cat2<-relabel(df$Cat, pre.UP_post.EQUAL='PreHyper_PostEqual', pre.DOWN_post.E
 
 df$direction<-rep(1,dim(df)[1])
 df$direction[which(df$OR<1)]<-2
-bonf<-0.05/dim(df)[1]
+
 df$col<-rep(1,dim(df)[1])
 df$col[which(df$P<0.05)]<-2	
 
